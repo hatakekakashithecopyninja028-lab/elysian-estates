@@ -35,9 +35,9 @@ export function Contact() {
             <SectionHeader eyebrow="Get in Touch" title="Begin a Conversation" />
             <div className="mt-12 space-y-6">
               {[
-                { icon: Mail, label: "Email", value: "private@aurelia-estates.com" },
-                { icon: Phone, label: "Concierge", value: "+1 (310) 555 0188" },
-                { icon: MapPin, label: "Headquarters", value: "Rodeo Drive, Beverly Hills, CA" },
+                { icon: Mail, label: "Email", value: "sumitdeveloper@gmail.com" },
+                { icon: Phone, label: "Concierge", value: "+91  090270 86097" },
+                { icon: MapPin, label: "Address", value: "Upper Sinola, 22, Mussoorie Rd, Malsi, Dehradun, Sinaula, Uttarakhand 248003" },
               ].map((c) => (
                 <div key={c.label} className="flex items-start gap-5 group">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 border border-primary/20 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-[0_0_30px_-5px_var(--gold)] transition-all">
@@ -62,7 +62,7 @@ export function Contact() {
           >
             <Field label="Full Name" placeholder="Your name" />
             <Field label="Email" placeholder="you@domain.com" type="email" />
-            <Field label="Phone" placeholder="+1 ..." />
+            <Field label="Phone" placeholder="+91 ..." />
             <div>
               <label className="text-xs uppercase tracking-wider text-primary/80">Message</label>
               <textarea

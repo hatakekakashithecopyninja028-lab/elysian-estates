@@ -88,9 +88,9 @@ export function Hero() {
           transition={{ delay: 1.1, duration: 0.8 }}
           className="mt-20 max-w-5xl glass-strong rounded-2xl p-2 grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-2"
         >
-          <SearchField icon={<MapPin className="w-4 h-4" />} label="Location" placeholder="Beverly Hills, Dubai…" />
+          <SearchField icon={<MapPin className="w-4 h-4" />} label="Location" placeholder="Upper Sinola, 22, Mussoorie Rd, Malsi, Dehradun, Sinaula, Uttarakhand 248003" />
           <SearchField icon={<Home className="w-4 h-4" />} label="Property" placeholder="Villa, Penthouse…" />
-          <SearchField icon={<DollarSign className="w-4 h-4" />} label="Budget" placeholder="$5M – $50M" />
+          <SearchField icon={<DollarSign className="w-4 h-4" />} label="Budget" placeholder="₹5M – ₹50M" />
           <button className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-medium hover-glow transition-all">
             <Search className="w-4 h-4" />
             Search

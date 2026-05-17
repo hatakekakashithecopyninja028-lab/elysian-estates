@@ -14,13 +14,13 @@ import { FloatingCTA } from "@/components/FloatingCTA";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aurelia Estates — Discover Luxury Living" },
+      { title: "Serene Mansion — Discover Luxury Living" },
       {
         name: "description",
         content:
           "A private brokerage curating the world's most distinguished residences — villas, penthouses, and estates for the discerning few.",
       },
-      { property: "og:title", content: "Aurelia Estates — Discover Luxury Living" },
+      { property: "og:title", content: "Serene Mansion — Discover Luxury Living" },
       {
         property: "og:description",
         content: "A private collection of luxury estates, penthouses, and private islands.",

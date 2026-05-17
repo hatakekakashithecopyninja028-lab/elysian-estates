@@ -50,7 +50,7 @@ export function About() {
           <SectionHeader
             eyebrow="About Aurelia"
             title="A House Built on Discretion"
-            subtitle="For nearly forty years, Aurelia Estates has quietly placed the world's finest residences into the hands of those who value privacy as much as prestige."
+            subtitle="For nearly forty years, Serene Mansion has quietly placed the world's finest residences into the hands of those who value privacy as much as prestige."
           />
 
           <div className="mt-12 grid grid-cols-2 gap-px bg-border rounded-2xl overflow-hidden">

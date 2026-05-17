@@ -25,8 +25,8 @@ export function Navbar() {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         <a href="#" className="font-display text-2xl tracking-wide">
-          <span className="text-gradient-gold">Aurelia</span>
-          <span className="text-foreground/80"> Estates</span>
+          <span className="text-gradient-gold">Serene </span>
+          <span className="text-foreground/80"> Mansion</span>
         </a>
 
         <nav className="hidden md:flex items-center gap-10">

@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2">
             <div className="font-display text-3xl">
-              <span className="text-gradient-gold">Aurelia</span> Estates
+              <span className="text-gradient-gold">Serene </span>Mansion
             </div>
             <p className="mt-4 text-foreground/60 max-w-sm leading-relaxed">
               A private brokerage representing the world's most distinguished homes. By introduction only.
@@ -24,18 +24,18 @@ export function Footer() {
           </div>
 
           <FooterCol title="Explore" links={["Properties", "Projects", "Gallery", "About"]} />
-          <FooterCol title="Office" links={["Beverly Hills", "Monaco", "Dubai", "Singapore"]} />
+          <FooterCol title="Office" links={["Uttarakhand ",]} />
         </div>
 
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row gap-6 items-center justify-between">
           <div className="text-sm text-foreground/40">
-            © {new Date().getFullYear()} Aurelia Estates. All rights reserved.
+            © {new Date().getFullYear()} Serene Mansion. All rights reserved.
           </div>
           <div className="flex gap-3">
             {[Instagram, Twitter, Linkedin, Facebook].map((Icon, i) => (
               <a
                 key={i}
-                href="#"
+                href="https://www.instagram.com/serenemansion_homestay/"
                 className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-primary hover:border-primary/40 transition-all"
               >
                 <Icon className="w-4 h-4" />

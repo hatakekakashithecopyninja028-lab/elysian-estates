@@ -8,12 +8,12 @@ import p5 from "@/assets/property-5.jpg";
 import p6 from "@/assets/property-6.jpg";
 
 const properties = [
-  { img: p1, name: "Villa Serenissima", location: "Lake Como, Italy", price: "$24,500,000", beds: 7, baths: 9, area: "12,400" },
-  { img: p2, name: "The Crown Penthouse", location: "Manhattan, NY", price: "$38,000,000", beds: 5, baths: 6, area: "8,200" },
-  { img: p3, name: "Obsidian Estate", location: "Beverly Hills, CA", price: "$42,750,000", beds: 8, baths: 11, area: "15,800" },
-  { img: p4, name: "Cliffside Mirage", location: "Amalfi Coast, IT", price: "$31,200,000", beds: 6, baths: 8, area: "10,500" },
-  { img: p5, name: "Skyline Tower 88", location: "Dubai, UAE", price: "$28,900,000", beds: 4, baths: 5, area: "7,600" },
-  { img: p6, name: "Maison Lumière", location: "Saint-Tropez, FR", price: "$19,800,000", beds: 6, baths: 7, area: "9,200" },
+  { img: p1, name: "Villa Serenissima", location: "Lake Como, Italy", price: "₹24,500,000", beds: 7, baths: 9, area: "12,400" },
+  { img: p2, name: "The Crown Penthouse", location: "Manhattan, NY", price: "₹38,000,000", beds: 5, baths: 6, area: "8,200" },
+  { img: p3, name: "Obsidian Estate", location: "Beverly Hills, CA", price: "₹42,750,000", beds: 8, baths: 11, area: "15,800" },
+  { img: p4, name: "Cliffside Mirage", location: "Amalfi Coast, IT", price: "₹31,200,000", beds: 6, baths: 8, area: "10,500" },
+  { img: p5, name: "Skyline Tower 88", location: "Dubai, UAE", price: "₹28,900,000", beds: 4, baths: 5, area: "7,600" },
+  { img: p6, name: "Maison Lumière", location: "Saint-Tropez, FR", price: "₹19,800,000", beds: 6, baths: 7, area: "9,200" },
 ];
 
 export function Properties() {
@@ -62,9 +62,9 @@ export function Properties() {
                   {p.location}
                 </div>
                 <div className="mt-5 pt-5 border-t border-border flex items-center justify-between text-sm text-foreground/70">
-                  <Stat icon={<Bed className="w-4 h-4" />} value={`${p.beds} bd`} />
-                  <Stat icon={<Bath className="w-4 h-4" />} value={`${p.baths} ba`} />
-                  <Stat icon={<Maximize className="w-4 h-4" />} value={`${p.area} ft²`} />
+                  <Stat icon={<Bed className="w-4 h-4" />} value={`₹{p.beds} bd`} />
+                  <Stat icon={<Bath className="w-4 h-4" />} value={`₹{p.baths} ba`} />
+                  <Stat icon={<Maximize className="w-4 h-4" />} value={`₹{p.area} ft²`} />
                 </div>
               </div>
             </motion.article>
