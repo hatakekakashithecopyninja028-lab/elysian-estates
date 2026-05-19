@@ -1,0 +1,186 @@
+Build a complete professional backend using **Node.js + Express.js + MongoDB** for a modern real estate website.
+
+The backend should be scalable, secure, and production-ready. The UI theme of the admin panel should match the frontend design with a modern professional look.
+
+## Core Features
+
+### 1. Authentication & Authorization
+
+* Admin Login using JWT authentication
+* Secure password hashing using bcrypt
+* Protected admin routes
+* Logout functionality
+* Role-based access (admin only)
+
+---
+
+## 2. Enquiry System
+
+### User Side
+
+Create an enquiry form where users can submit:
+
+* Full Name
+* Email
+* Phone Number
+* Message
+* Property Interested In
+
+### Backend
+
+* Store all enquiries in MongoDB
+* Validate all fields
+* Send success response
+* Add API endpoints for enquiry submission
+
+### Admin Panel
+
+Admin should be able to:
+
+* View all enquiries
+* Search enquiries
+* Delete enquiries
+* Mark enquiry as contacted
+* View enquiry details in a professional dashboard UI
+
+---
+
+## 3. Properties Management System
+
+### Property Fields
+
+Each property should include:
+
+* Property Title
+* Thumbnail Image Upload
+* Multiple Property Images
+* Description
+* Price
+* Property Type
+* Location
+* Bedrooms
+* Bathrooms
+* Area Size
+* Featured Property Toggle
+* Status (Available / Sold)
+* Created Date
+
+### Admin Features
+
+Admin should be able to:
+
+* Add property
+* Edit property
+* Delete property
+* View all properties
+* Upload images using Multer or Cloudinary
+* Manage featured properties
+* Search and filter properties
+
+Implement complete CRUD operations.
+
+---
+
+## 4. User API Features
+
+Create APIs for:
+
+* Get all properties
+* Get single property details
+* Filter properties by:
+
+  * Price
+  * Location
+  * Property Type
+* Featured properties API
+* Latest properties API
+
+---
+
+## 5. Admin Dashboard
+
+Create a professional admin dashboard with:
+
+* Total Properties Count
+* Total Enquiries Count
+* Recent Enquiries
+* Recent Properties
+* Statistics cards
+* Sidebar navigation
+* Responsive design
+
+The admin panel UI should look modern, premium, and consistent with the frontend theme.
+
+---
+
+## 6. Tech Stack
+
+Use:
+
+* Node.js
+* Express.js
+* MongoDB + Mongoose
+* JWT Authentication
+* Multer / Cloudinary for uploads
+* dotenv
+* cors
+* bcryptjs
+
+---
+
+## 7. Folder Structure
+
+Create a clean scalable folder structure like:
+
+/backend
+/config
+/controllers
+/models
+/routes
+/middlewares
+/services
+/utils
+/uploads
+server.js
+
+---
+
+## 8. API Requirements
+
+Build REST APIs with:
+
+* Proper status codes
+* Error handling middleware
+* Validation
+* Clean controller structure
+* Secure routes
+* Async/await pattern
+
+---
+
+## 9. Additional Features
+
+* Pagination for properties
+* Image optimization
+* Loading states
+* API documentation
+* Environment configuration
+* Responsive admin panel
+* SEO-friendly property APIs
+
+---
+
+## 10. Deliverables
+
+Build:
+
+* Complete backend APIs
+* MongoDB models
+* Authentication system
+* Admin panel
+* Property CRUD
+* Enquiry management system
+* Professional responsive UI
+* Production-ready code
+
+Make the code clean, modular, and maintainable like a real company-level project.

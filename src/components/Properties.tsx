@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Bed, Bath, Maximize, MapPin } from "lucide-react";
 import p1 from "@/assets/property-1.jpg";
@@ -7,16 +8,52 @@ import p4 from "@/assets/property-4.jpg";
 import p5 from "@/assets/property-5.jpg";
 import p6 from "@/assets/property-6.jpg";
 
-const properties = [
-  { img: p1, name: "Villa Serenissima", location: "Lake Como, Italy", price: "₹24,500,000", beds: 7, baths: 9, area: "12,400" },
-  { img: p2, name: "The Crown Penthouse", location: "Manhattan, NY", price: "₹38,000,000", beds: 5, baths: 6, area: "8,200" },
-  { img: p3, name: "Obsidian Estate", location: "Beverly Hills, CA", price: "₹42,750,000", beds: 8, baths: 11, area: "15,800" },
-  { img: p4, name: "Cliffside Mirage", location: "Amalfi Coast, IT", price: "₹31,200,000", beds: 6, baths: 8, area: "10,500" },
-  { img: p5, name: "Skyline Tower 88", location: "Dubai, UAE", price: "₹28,900,000", beds: 4, baths: 5, area: "7,600" },
-  { img: p6, name: "Maison Lumière", location: "Saint-Tropez, FR", price: "₹19,800,000", beds: 6, baths: 7, area: "9,200" },
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+const STATIC_PROPERTIES = [
+  { _id: "1", thumbnail: p1, title: "Villa Serenissima", location: "Lake Como, Italy", price: 24500000, priceFormatted: "₹24,500,000", bedrooms: 7, bathrooms: 9, area: 12400, status: "Available" },
+  { _id: "2", thumbnail: p2, title: "The Crown Penthouse", location: "Manhattan, NY", price: 38000000, priceFormatted: "₹38,000,000", bedrooms: 5, bathrooms: 6, area: 8200, status: "Available" },
+  { _id: "3", thumbnail: p3, title: "Obsidian Estate", location: "Beverly Hills, CA", price: 42750000, priceFormatted: "₹42,750,000", bedrooms: 8, bathrooms: 11, area: 15800, status: "Available" },
+  { _id: "4", thumbnail: p4, title: "Cliffside Mirage", location: "Amalfi Coast, IT", price: 31200000, priceFormatted: "₹31,200,000", bedrooms: 6, bathrooms: 8, area: 10500, status: "Available" },
+  { _id: "5", thumbnail: p5, title: "Skyline Tower 88", location: "Dubai, UAE", price: 28900000, priceFormatted: "₹28,900,000", bedrooms: 4, bathrooms: 5, area: 7600, status: "Available" },
+  { _id: "6", thumbnail: p6, title: "Maison Lumière", location: "Saint-Tropez, FR", price: 19800000, priceFormatted: "₹19,800,000", bedrooms: 6, bathrooms: 7, area: 9200, status: "Available" },
 ];
 
+interface Property {
+  _id: string;
+  thumbnail: string;
+  title: string;
+  location: string;
+  price: number;
+  priceFormatted: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  status: string;
+}
+
 export function Properties() {
+  const [properties, setProperties] = useState<Property[]>(STATIC_PROPERTIES as Property[]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_BASE}/api/properties?limit=6&status=Available`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && data.data?.length > 0) {
+          setProperties(data.data);
+        }
+      } catch {
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
   return (
     <section id="properties" className="relative py-32">
       <div className="container mx-auto px-6">
@@ -29,7 +66,7 @@ export function Properties() {
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties.map((p, i) => (
             <motion.article
-              key={p.name}
+              key={p._id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -38,8 +75,10 @@ export function Properties() {
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                  src={p.img}
-                  alt={p.name}
+                  src={typeof p.thumbnail === "string" && p.thumbnail.startsWith("/uploads")
+                    ? `${API_BASE}${p.thumbnail}`
+                    : p.thumbnail}
+                  alt={p.title}
                   loading="lazy"
                   width={1024}
                   height={768}
@@ -47,29 +86,33 @@ export function Properties() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
                 <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full glass text-xs uppercase tracking-wider text-primary">
-                  For Sale
+                  {p.status}
                 </div>
                 <div className="absolute bottom-4 right-4 text-right">
                   <div className="text-xs uppercase tracking-wider text-primary/80">Asking</div>
-                  <div className="font-display text-2xl text-foreground">{p.price}</div>
+                  <div className="font-display text-2xl text-foreground">{p.priceFormatted || `₹${p.price?.toLocaleString("en-IN")}`}</div>
                 </div>
               </div>
 
               <div className="p-6">
-                <h3 className="font-display text-2xl">{p.name}</h3>
+                <h3 className="font-display text-2xl">{p.title}</h3>
                 <div className="mt-2 flex items-center gap-1.5 text-sm text-foreground/60">
                   <MapPin className="w-3.5 h-3.5 text-primary" />
                   {p.location}
                 </div>
                 <div className="mt-5 pt-5 border-t border-border flex items-center justify-between text-sm text-foreground/70">
-                  <Stat icon={<Bed className="w-4 h-4" />} value={`₹{p.beds} bd`} />
-                  <Stat icon={<Bath className="w-4 h-4" />} value={`₹{p.baths} ba`} />
-                  <Stat icon={<Maximize className="w-4 h-4" />} value={`₹{p.area} ft²`} />
+                  <Stat icon={<Bed className="w-4 h-4" />} value={`${p.bedrooms} bd`} />
+                  <Stat icon={<Bath className="w-4 h-4" />} value={`${p.bathrooms} ba`} />
+                  <Stat icon={<Maximize className="w-4 h-4" />} value={`${p.area?.toLocaleString()} ft²`} />
                 </div>
               </div>
             </motion.article>
           ))}
         </div>
+
+        {loading && (
+          <div className="mt-8 text-center text-foreground/40 text-sm">Loading properties…</div>
+        )}
       </div>
     </section>
   );
