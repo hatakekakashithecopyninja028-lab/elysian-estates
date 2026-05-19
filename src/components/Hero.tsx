@@ -1,8 +1,40 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Home, DollarSign, ArrowRight } from "lucide-react";
+import { Search, MapPin, Home, Wallet, ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-mansion.jpg";
+import type { PropertyFilters } from "@/routes/index";
 
-export function Hero() {
+const BUDGET_OPTIONS = [
+  { label: "Any Budget", min: "", max: "" },
+  { label: "Under ₹2 Crore", min: "", max: "20000000" },
+  { label: "₹2Cr – ₹3Cr", min: "20000000", max: "30000000" },
+  { label: "₹3Cr – ₹5Cr", min: "30000000", max: "50000000" },
+  { label: "₹5Cr – ₹10Cr", min: "50000000", max: "100000000" },
+  { label: "Above ₹10 Crore", min: "100000000", max: "" },
+];
+
+const PROPERTY_TYPES = ["Villa", "Penthouse", "Estate", "Mansion", "Apartment", "Townhouse"];
+
+interface HeroProps {
+  onSearch?: (filters: Partial<PropertyFilters>) => void;
+}
+
+export function Hero({ onSearch }: HeroProps) {
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("");
+  const [budget, setBudget] = useState("");
+
+  const handleSearch = () => {
+    if (!onSearch) return;
+    const selected = BUDGET_OPTIONS.find((b) => b.label === budget);
+    onSearch({
+      location,
+      type,
+      minPrice: selected?.min ?? "",
+      maxPrice: selected?.max ?? "",
+    });
+  };
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
@@ -81,17 +113,68 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Floating search bar */}
+        {/* Functional search bar */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8 }}
           className="mt-20 max-w-5xl glass-strong rounded-2xl p-2 grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-2"
         >
-          <SearchField icon={<MapPin className="w-4 h-4" />} label="Location" placeholder="Upper Sinola, 22, Mussoorie Rd, Malsi, Dehradun, Sinaula, Uttarakhand 248003" />
-          <SearchField icon={<Home className="w-4 h-4" />} label="Property" placeholder="Villa, Penthouse…" />
-          <SearchField icon={<DollarSign className="w-4 h-4" />} label="Budget" placeholder="₹5M – ₹50M" />
-          <button className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-medium hover-glow transition-all">
+          {/* Location */}
+          <div className="px-5 py-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary/80">
+              <MapPin className="w-4 h-4" />
+              Location
+            </div>
+            <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              placeholder="City, country…"
+              className="mt-1 w-full bg-transparent text-foreground placeholder:text-foreground/40 outline-none text-sm"
+            />
+          </div>
+
+          {/* Property Type */}
+          <div className="px-5 py-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary/80">
+              <Home className="w-4 h-4" />
+              Property Type
+            </div>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="mt-1 w-full bg-transparent text-foreground outline-none text-sm cursor-pointer appearance-none"
+            >
+              <option value="" className="bg-background">Any Type</option>
+              {PROPERTY_TYPES.map((t) => (
+                <option key={t} value={t} className="bg-background">{t}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Budget */}
+          <div className="px-5 py-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary/80">
+              <Wallet className="w-4 h-4" />
+              Budget
+            </div>
+            <select
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              className="mt-1 w-full bg-transparent text-foreground outline-none text-sm cursor-pointer appearance-none"
+            >
+              {BUDGET_OPTIONS.map((b) => (
+                <option key={b.label} value={b.label} className="bg-background">{b.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search button */}
+          <button
+            onClick={handleSearch}
+            className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-medium hover-glow transition-all"
+          >
             <Search className="w-4 h-4" />
             Search
           </button>
@@ -108,28 +191,5 @@ export function Hero() {
         Scroll to explore
       </motion.div>
     </section>
-  );
-}
-
-function SearchField({
-  icon,
-  label,
-  placeholder,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  placeholder: string;
-}) {
-  return (
-    <div className="px-5 py-3 rounded-xl hover:bg-white/5 transition-colors">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary/80">
-        {icon}
-        {label}
-      </div>
-      <input
-        placeholder={placeholder}
-        className="mt-1 w-full bg-transparent text-foreground placeholder:text-foreground/40 outline-none text-sm"
-      />
-    </div>
   );
 }

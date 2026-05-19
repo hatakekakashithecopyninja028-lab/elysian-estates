@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
@@ -30,13 +31,48 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+export interface PropertyFilters {
+  location: string;
+  type: string;
+  minPrice: string;
+  maxPrice: string;
+  sort: string;
+}
+
+const DEFAULT_FILTERS: PropertyFilters = {
+  location: "",
+  type: "",
+  minPrice: "",
+  maxPrice: "",
+  sort: "-createdAt",
+};
+
 function Home() {
+  const [filters, setFilters] = useState<PropertyFilters>(DEFAULT_FILTERS);
+
+  const handleHeroSearch = (heroFilters: Partial<PropertyFilters>) => {
+    setFilters((prev) => ({ ...prev, ...heroFilters }));
+    setTimeout(() => {
+      document.getElementById("properties")?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  };
+
+  const handleFilterChange = (updated: Partial<PropertyFilters>) => {
+    setFilters((prev) => ({ ...prev, ...updated }));
+  };
+
+  const handleReset = () => setFilters(DEFAULT_FILTERS);
+
   return (
     <div className="relative bg-background text-foreground overflow-x-hidden">
       <Navbar />
       <main>
-        <Hero />
-        <Properties />
+        <Hero onSearch={handleHeroSearch} />
+        <Properties
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onReset={handleReset}
+        />
         <About />
         <FeaturedProjects />
         <WhyChoose />
