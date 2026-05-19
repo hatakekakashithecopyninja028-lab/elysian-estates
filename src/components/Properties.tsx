@@ -8,16 +8,18 @@ import p4 from "@/assets/property-4.jpg";
 import p5 from "@/assets/property-5.jpg";
 import p6 from "@/assets/property-6.jpg";
 import type { PropertyFilters } from "@/routes/index";
+import { PropertyModal } from "@/components/PropertyModal";
+import type { ModalProperty } from "@/components/PropertyModal";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const STATIC_PROPERTIES = [
-  { _id: "1", thumbnail: p1, title: "Villa Serenissima", location: "Lake Como, Italy", price: 24500000, priceFormatted: "₹24,500,000", bedrooms: 7, bathrooms: 9, area: 12400, status: "Available", type: "Villa" },
-  { _id: "2", thumbnail: p2, title: "The Crown Penthouse", location: "Manhattan, NY", price: 38000000, priceFormatted: "₹38,000,000", bedrooms: 5, bathrooms: 6, area: 8200, status: "Available", type: "Penthouse" },
-  { _id: "3", thumbnail: p3, title: "Obsidian Estate", location: "Beverly Hills, CA", price: 42750000, priceFormatted: "₹42,750,000", bedrooms: 8, bathrooms: 11, area: 15800, status: "Available", type: "Estate" },
-  { _id: "4", thumbnail: p4, title: "Cliffside Mirage", location: "Amalfi Coast, IT", price: 31200000, priceFormatted: "₹31,200,000", bedrooms: 6, bathrooms: 8, area: 10500, status: "Available", type: "Villa" },
-  { _id: "5", thumbnail: p5, title: "Skyline Tower 88", location: "Dubai, UAE", price: 28900000, priceFormatted: "₹28,900,000", bedrooms: 4, bathrooms: 5, area: 7600, status: "Available", type: "Penthouse" },
-  { _id: "6", thumbnail: p6, title: "Maison Lumière", location: "Saint-Tropez, FR", price: 19800000, priceFormatted: "₹19,800,000", bedrooms: 6, bathrooms: 7, area: 9200, status: "Available", type: "Villa" },
+  { _id: "1", thumbnail: p1, title: "Villa Serenissima", location: "Lake Como, Italy", price: 24500000, priceFormatted: "₹24,500,000", bedrooms: 7, bathrooms: 9, area: 12400, status: "Available", type: "Villa", images: [p1, p2, p3], description: "Nestled along the serene shores of Lake Como, Villa Serenissima is a testament to Italian grandeur. Seven palatial bedrooms, a private 40-metre lakefront, and gardens designed by a landscape laureate. Every room frames a different masterpiece of nature." },
+  { _id: "2", thumbnail: p2, title: "The Crown Penthouse", location: "Manhattan, NY", price: 38000000, priceFormatted: "₹38,000,000", bedrooms: 5, bathrooms: 6, area: 8200, status: "Available", type: "Penthouse", images: [p2, p4, p5], description: "Occupying the entire top floor of one of Manhattan's most coveted towers, The Crown commands uninterrupted views across Central Park and the Hudson. A full-floor private terrace, a 1,200-bottle wine vault, and a dedicated concierge floor define life above the city." },
+  { _id: "3", thumbnail: p3, title: "Obsidian Estate", location: "Beverly Hills, CA", price: 42750000, priceFormatted: "₹42,750,000", bedrooms: 8, bathrooms: 11, area: 15800, status: "Available", type: "Estate", images: [p3, p1, p6], description: "A fortress of elegance in the most exclusive enclave of Beverly Hills. Obsidian Estate spans over 15,000 sq ft of bespoke interiors, anchored by a 90-foot infinity pool that dissolves into the canyon below. The eight-car motor court and private cinema complete this singular compound." },
+  { _id: "4", thumbnail: p4, title: "Cliffside Mirage", location: "Amalfi Coast, IT", price: 31200000, priceFormatted: "₹31,200,000", bedrooms: 6, bathrooms: 8, area: 10500, status: "Available", type: "Villa", images: [p4, p2, p3], description: "Carved into the UNESCO-listed Amalfi cliffs, Cliffside Mirage is an architectural poem — six suites, each a private sanctuary with sea-facing terraces. A private pier and sea-level pool grant direct access to the Mediterranean at any hour." },
+  { _id: "5", thumbnail: p5, title: "Skyline Tower 88", location: "Dubai, UAE", price: 28900000, priceFormatted: "₹28,900,000", bedrooms: 4, bathrooms: 5, area: 7600, status: "Available", type: "Penthouse", images: [p5, p1, p4], description: "On the 88th floor of Dubai's most iconic mixed-use tower, Skyline 88 offers four private sky-suites, a wraparound terrace, and floor-to-ceiling glass affording 270° views of the Gulf, the Burj, and the desert horizon beyond." },
+  { _id: "6", thumbnail: p6, title: "Maison Lumière", location: "Saint-Tropez, FR", price: 19800000, priceFormatted: "₹19,800,000", bedrooms: 6, bathrooms: 7, area: 9200, status: "Available", type: "Villa", images: [p6, p3, p5], description: "A short stroll from the Pampelonne beach, Maison Lumière is a sun-drenched Provençal estate reimagined for contemporary luxury. Aged terracotta, handmade linen, and a kitchen garden cultivated by a Michelin-starred chef define the ethos of effortless French living." },
 ];
 
 const PROPERTY_TYPES = ["Villa", "Penthouse", "Estate", "Mansion", "Apartment", "Townhouse"];
@@ -49,6 +51,8 @@ interface Property {
   area: number;
   status: string;
   type?: string;
+  description?: string;
+  images?: string[];
 }
 
 interface PropertiesProps {
@@ -74,6 +78,7 @@ export function Properties({ filters, onFilterChange, onReset }: PropertiesProps
   const [loading, setLoading] = useState(false);
   const [apiAvailable, setApiAvailable] = useState(false);
   const [budgetLabel, setBudgetLabel] = useState("Any Budget");
+  const [selectedProperty, setSelectedProperty] = useState<ModalProperty | null>(null);
 
   const isFiltered = filters.location || filters.type || filters.minPrice || filters.maxPrice;
 
@@ -269,7 +274,8 @@ export function Properties({ filters, onFilterChange, onReset }: PropertiesProps
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                  className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500 hover-glow"
+                  onClick={() => setSelectedProperty(p as ModalProperty)}
+                  className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500 hover-glow cursor-pointer"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
@@ -285,6 +291,14 @@ export function Properties({ filters, onFilterChange, onReset }: PropertiesProps
                       className="w-full h-full object-cover transition-transform duration-[1.4s] group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium tracking-wide shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        View Details
+                      </span>
+                    </div>
+
                     <div className="absolute top-4 left-4 flex gap-2">
                       <span className="px-3 py-1.5 rounded-full glass text-xs uppercase tracking-wider text-primary">
                         {p.status}
@@ -304,7 +318,7 @@ export function Properties({ filters, onFilterChange, onReset }: PropertiesProps
                   </div>
 
                   <div className="p-6">
-                    <h3 className="font-display text-2xl">{p.title}</h3>
+                    <h3 className="font-display text-2xl group-hover:text-primary/90 transition-colors">{p.title}</h3>
                     <div className="mt-2 flex items-center gap-1.5 text-sm text-foreground/60">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
                       {p.location}
@@ -321,6 +335,12 @@ export function Properties({ filters, onFilterChange, onReset }: PropertiesProps
           )}
         </AnimatePresence>
       </div>
+
+      {/* Property Detail Modal */}
+      <PropertyModal
+        property={selectedProperty}
+        onClose={() => setSelectedProperty(null)}
+      />
     </section>
   );
 }
