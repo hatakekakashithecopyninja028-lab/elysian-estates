@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, MapPin, Bed, Bath, Maximize, ChevronLeft, ChevronRight,
-  ArrowRight, CheckCircle, Tag, Home,
+  ArrowRight, CheckCircle, Tag, Home, Play,
 } from "lucide-react";
+import { VirtualTour } from "@/components/VirtualTour";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -30,6 +31,7 @@ interface Props {
 
 export function PropertyModal({ property, onClose }: Props) {
   const [activeImg, setActiveImg] = useState(0);
+  const [tourOpen, setTourOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -50,6 +52,7 @@ export function PropertyModal({ property, onClose }: Props) {
   useEffect(() => {
     if (property) {
       setActiveImg(0);
+      setTourOpen(false);
       setForm({ name: "", email: "", phone: "", message: "" });
       setSent(false);
       setFormError("");
@@ -60,13 +63,18 @@ export function PropertyModal({ property, onClose }: Props) {
   useEffect(() => {
     if (!property) return;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (tourOpen) setTourOpen(false);
+        else onClose();
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [property, onClose]);
+  }, [property, onClose, tourOpen]);
 
   const prevImg = useCallback(() =>
     setActiveImg((i) => (i - 1 + allImages.length) % allImages.length),
@@ -171,12 +179,21 @@ export function PropertyModal({ property, onClose }: Props) {
                     </>
                   )}
 
-                  {/* Image counter */}
-                  {allImages.length > 1 && (
-                    <div className="absolute bottom-4 left-4 px-3 py-1 rounded-full glass text-xs text-foreground/70">
-                      {activeImg + 1} / {allImages.length}
-                    </div>
-                  )}
+                  {/* Image counter + Virtual Tour button */}
+                  <div className="absolute bottom-4 inset-x-4 flex items-center justify-between">
+                    {allImages.length > 1 ? (
+                      <div className="px-3 py-1 rounded-full glass text-xs text-foreground/70">
+                        {activeImg + 1} / {allImages.length}
+                      </div>
+                    ) : <div />}
+                    <button
+                      onClick={() => setTourOpen(true)}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium uppercase tracking-wider hover:bg-primary transition-all shadow-lg group"
+                    >
+                      <Play className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                      Virtual Tour
+                    </button>
+                  </div>
 
                   {/* Status + Type badges */}
                   <div className="absolute top-4 left-4 flex gap-2">
@@ -390,6 +407,19 @@ export function PropertyModal({ property, onClose }: Props) {
               </div>
             </div>
           </motion.div>
+
+          {/* Virtual Tour full-screen overlay */}
+          <AnimatePresence>
+            {tourOpen && (
+              <VirtualTour
+                images={allImages}
+                title={property.title}
+                location={property.location}
+                type={property.type}
+                onClose={() => setTourOpen(false)}
+              />
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>
