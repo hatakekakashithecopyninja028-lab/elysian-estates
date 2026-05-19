@@ -2,6 +2,11 @@ import Property from "../models/Property.js";
 import { sendSuccess, sendError, sendPaginated } from "../utils/apiResponse.js";
 import { asyncHandler } from "../middlewares/errorHandler.js";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const getAllProperties = asyncHandler(async (req, res) => {
   const {
@@ -104,7 +109,7 @@ export const toggleFeatured = asyncHandler(async (req, res) => {
 
 function deleteFile(filePath) {
   try {
-    const full = `./backend${filePath}`;
+    const full = path.join(__dirname, "..", filePath);
     if (fs.existsSync(full)) fs.unlinkSync(full);
   } catch {}
 }
